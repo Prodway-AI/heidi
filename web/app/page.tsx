@@ -74,10 +74,7 @@ export default function HomePage() {
                     <img src={job.logo} alt={job.logoAlt} />
                   </div>
                   <div>
-                    <h3>
-                      {job.role}
-                      {current ? <span className="now-badge">Now</span> : null}
-                    </h3>
+                    <h3>{job.role}</h3>
                     <p>
                       {job.org} · {job.place}
                     </p>

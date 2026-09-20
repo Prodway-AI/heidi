@@ -2,6 +2,34 @@
 
 import { useEffect } from "react";
 
+function easeInOutCubic(t: number) {
+  return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+}
+
+function scrollToCentered(el: HTMLElement, duration = 920) {
+  const start = window.scrollY;
+  const dest = start + el.getBoundingClientRect().top - (window.innerHeight - el.getBoundingClientRect().height) / 2;
+
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    window.scrollTo(0, dest);
+    return Promise.resolve();
+  }
+
+  return new Promise<void>((resolve) => {
+    const began = performance.now();
+    const tick = (now: number) => {
+      const progress = Math.min(1, (now - began) / duration);
+      window.scrollTo(0, start + (dest - start) * easeInOutCubic(progress));
+      if (progress < 1) {
+        requestAnimationFrame(tick);
+      } else {
+        resolve();
+      }
+    };
+    requestAnimationFrame(tick);
+  });
+}
+
 export function ExperienceMotion() {
   useEffect(() => {
     const current = document.getElementById("current-role");
@@ -23,9 +51,8 @@ export function ExperienceMotion() {
       if (!link) return;
 
       event.preventDefault();
-      current.scrollIntoView({ behavior: "smooth", block: "center" });
+      void scrollToCentered(current).then(light);
       history.pushState(null, "", "#experience");
-      window.setTimeout(light, 280);
     };
 
     document.addEventListener("click", onClick);
