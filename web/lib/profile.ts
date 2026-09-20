@@ -15,6 +15,7 @@ export const profile = {
       place: "Houston",
       logo: "/assets/logos/energy-transfer.png",
       logoAlt: "Energy Transfer logo",
+      current: true,
     },
     {
       role: "Contract Analyst Intern",

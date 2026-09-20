@@ -1,8 +1,10 @@
+import { ExperienceMotion } from "@/components/ExperienceMotion";
 import { profile } from "@/lib/profile";
 
 export default function HomePage() {
   return (
     <>
+      <ExperienceMotion />
       <a className="skip" href="#about">
         Skip to content
       </a>
@@ -59,20 +61,30 @@ export default function HomePage() {
           <p className="kicker">Experience</p>
           <h2>Where the work has been.</h2>
           <div className="timeline">
-            {profile.experience.map((job) => (
-              <article className="job" key={`${job.org}-${job.dates}`}>
-                <time>{job.dates}</time>
-                <div className="logo-tile">
-                  <img src={job.logo} alt={job.logoAlt} />
-                </div>
-                <div>
-                  <h3>{job.role}</h3>
-                  <p>
-                    {job.org} · {job.place}
-                  </p>
-                </div>
-              </article>
-            ))}
+            {profile.experience.map((job) => {
+              const current = "current" in job && job.current;
+              return (
+                <article
+                  className={current ? "job is-current" : "job"}
+                  id={current ? "current-role" : undefined}
+                  key={`${job.org}-${job.dates}`}
+                >
+                  <time>{job.dates}</time>
+                  <div className="logo-tile">
+                    <img src={job.logo} alt={job.logoAlt} />
+                  </div>
+                  <div>
+                    <h3>
+                      {job.role}
+                      {current ? <span className="now-badge">Now</span> : null}
+                    </h3>
+                    <p>
+                      {job.org} · {job.place}
+                    </p>
+                  </div>
+                </article>
+              );
+            })}
           </div>
         </section>
 
